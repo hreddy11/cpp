@@ -1,0 +1,11 @@
+# Default reviewer for all repository files
+* @hreddy11
+
+# Application code
+/src/ @hreddy11
+
+# Tests
+/tests/ @hreddy11
+
+# GitHub workflows and repository configuration
+/.github/ @hreddy11
