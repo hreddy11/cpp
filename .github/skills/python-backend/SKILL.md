@@ -10,7 +10,7 @@ General rules (typing, security, git workflow, scope control) live in
 
 ## Stack
 
-Python 3.12, FastAPI, Pydantic, pytest, Ruff (lint and format).
+Python 3.12, uv, FastAPI, Pydantic, pytest, Ruff (lint and format).
 
 ## Implementation
 
@@ -43,9 +43,9 @@ Use FastAPI `TestClient` for API tests.
 
 Run and report the results of:
 
-    ruff check .
-    ruff format --check .
-    pytest
+    uv run --locked ruff check .
+    uv run --locked ruff format --check .
+    uv run --locked pytest
 
 Then:
 - Review the diff for unrelated changes.

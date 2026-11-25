@@ -1,0 +1,52 @@
+minimum_pre_commit_version: "4.2.0"
+default_language_version:
+  python: python3.12
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+        stages: [pre-commit]
+      - id: end-of-file-fixer
+        stages: [pre-commit]
+      - id: check-yaml
+        stages: [pre-commit]
+      - id: check-json
+        stages: [pre-commit]
+      - id: check-merge-conflict
+        stages: [pre-commit]
+      - id: check-ast
+        stages: [pre-commit]
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.11.13
+    hooks:
+      - id: ruff-check
+        stages: [pre-commit]
+      - id: ruff-format
+        stages: [pre-commit]
+      - id: ruff-check
+        name: ruff check (pre-push)
+        args: [.]
+        pass_filenames: false
+        always_run: true
+        stages: [pre-push]
+      - id: ruff-format
+        name: ruff format check (pre-push)
+        args: [--check, .]
+        pass_filenames: false
+        always_run: true
+        stages: [pre-push]
+
+  - repo: local
+    hooks:
+      - id: pytest
+        name: pytest (pre-push)
+        entry: >-
+          sh -c 'uv run --locked python -m pytest; status=$?; if [ "$status" -eq 5 ]; then
+          echo "No tests collected; skipping pytest."; exit 0; fi; exit "$status"'
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-push]
