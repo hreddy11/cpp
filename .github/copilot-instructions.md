@@ -19,6 +19,7 @@ Keep the implementation simple, modular, testable, and maintainable.
 ## 2. General development rules
 
 - Use Python 3.12.
+- Use uv for Python environment and dependency management.
 - Follow PEP 8 (enforced by Ruff).
 - Add type hints to all function signatures.
 - Prefer clear, readable code over unnecessary abstractions.
@@ -62,8 +63,8 @@ This is a portfolio management application.
 ## 6. Code quality
 
 - Use Ruff for both linting and formatting.
-  - Lint: `ruff check .`
-  - Format: `ruff format .`
+  - Lint: `uv run --locked ruff check .`
+  - Format: `uv run --locked ruff format .`
 - Do not add Black, isort, or Flake8; Ruff replaces them.
 - Keep Ruff configuration in `pyproject.toml`.
 - Follow the repository's pre-commit configuration.

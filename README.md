@@ -2,20 +2,19 @@
 
 ## Development setup
 
-Use Python 3.12, available as `python3.12`, and create and activate a virtual
-environment. Install the development tools and both Git hooks:
+Install [uv](https://docs.astral.sh/uv/getting-started/installation/) (for
+example, `brew install uv` on macOS). From the repository root, synchronize the
+Python 3.12 environment and install both Git hooks:
 
 ```bash
-python3.12 -m venv .venv
-source .venv/bin/activate
-python -m pip install pre-commit==4.2.0 pytest==8.3.5 ruff==0.11.13
-pre-commit install
-pre-commit install --hook-type pre-push
+uv sync --locked
+uv run --locked pre-commit install
+uv run --locked pre-commit install --hook-type pre-push
 ```
 
-Keep the environment active when committing or pushing: the pytest hook uses
-its Python interpreter and installed dependencies. Install the project's test
-dependencies there as they are introduced.
+`uv sync` creates `.venv` and installs the locked development dependencies.
+Run commands through `uv run --locked` without activating the environment.
+Git hooks require `uv` to be on `PATH`, including when invoked from an IDE.
 
 The commit hook removes trailing whitespace, fixes missing final newlines, and
 checks YAML, JSON, merge conflict markers, and Python syntax trees. It also
@@ -31,13 +30,18 @@ not installed or run.
 Run all checks manually, including against all tracked files, with:
 
 ```bash
-pre-commit run --all-files
-pre-commit run --hook-stage pre-push --all-files
+uv run --locked pre-commit run --all-files
+uv run --locked pre-commit run --hook-stage pre-push --all-files
 ```
 
-For individual tools, run `ruff check .`, `ruff format --check .`, and `pytest`.
-To update pinned hook versions, run `pre-commit autoupdate`, update the matching
-Ruff version in the installation command above, and rerun both hook stages.
-The framework installs its remote hook environments automatically. These local
-hooks are not a substitute for CI: no GitHub Actions quality workflow is
-configured yet, so developers must install and run the hooks themselves.
+For individual tools, run `uv run --locked ruff check .`,
+`uv run --locked ruff format --check .`, and `uv run --locked pytest`.
+Pytest exits with code 5 when no tests are collected; only the push hook treats
+that as a skip.
+
+To update pinned hook versions, run `uv run --locked pre-commit autoupdate`.
+Keep the Ruff development dependency in sync with the Ruff hook version using
+`uv add --dev ruff==<version>`, commit the updated lockfile, and rerun both hook
+stages. The framework installs its remote hook environments automatically.
+These local hooks are not a substitute for CI: no GitHub Actions quality
+workflow is configured yet, so developers must install and run the hooks.
